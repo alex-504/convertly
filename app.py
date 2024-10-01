@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 
@@ -39,16 +39,29 @@ def upload_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
-        #extract text from PDF using PyPDF2
+        # extract text from PDF using PyPDF2
         reader = PdfReader(filepath)
         text = ''
 
         for page in reader.pages:
             text += page.extract_text()
 
-        return f'File "{filename}" uploaded and converted successfully! <br>Extracted Text: <br><pre>{text}<pre>', 200
+        # save the extracted text to a text file
+        text_filename = filename.rsplit('.', 1)[0] + '.txt'
+        text_filepath = os.path.join(app.config['UPLOAD_FOLDER'], text_filename)
+        with open(text_filepath, 'w') as text_file:
+            text_file.write(text)
+
+        # provide download link for the text file
+        return f'File "{filename}" uploaded and converted successfully!<br><a href="/download/{text_filename}">Download extracted text</a><br>Extracted Text: <br><pre>{text}<pre>', 200
+
     else:
         return 'Invalid file format. Only PDF files are allowed.', 400
+
+# route to download the text file
+@app.route('/download/<filename>')
+def download(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
 
 # run app
