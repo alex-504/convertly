@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +11,13 @@
 <body>
   <section class="home">
     <div class="container">
+        <nav>
+          {% extends "base.html" %}
+
+          {% block title %}Convertly - Upload{% endblock %}
+          
+          {% block content %}
+        </nav>
         <h1>Welcome to Convertly</h1>
         <p>File Conversion Service</p>
 
@@ -18,22 +27,52 @@
             <p id="file-name" style="margin-top: 10px;"></p>
             <input id="submit-button" type="submit" value="Upload" disabled class="disabled-button">
         </form>
+        <div class="loader-container">
+          <div class="loader-bar" id="loader-bar">0%</div>
+        </div>
+        <div class="spinner" id="loading-spinner"></div>
     </div>
   </section>
 
-    <script>
-        const fileUpload = document.getElementById('file-upload');
-        const submitButton = document.getElementById('submit-button');
+  <script>
+    const uploadForm = document.getElementById('upload-form');
+    const fileUpload = document.getElementById('file-upload');
+    const submitButton = document.getElementById('submit-button');
+    const spinner = document.getElementById('loading-spinner');
 
-        submitButton.disabled = true;
+    submitButton.disabled = true;
 
-        fileUpload.addEventListener('change', function(event) {
-            const fileName = event.target.files[0]?.name;
-            document.getElementById('file-name').innerText = fileName ? `Selected file: ${fileName}` : '';
-            submitButton.disabled = !fileName;
-            submitButton.classList.toggle('active-button', !!fileName);
-            submitButton.classList.toggle('disabled-button', !fileName);
-        });
-    </script>
+    fileUpload.addEventListener('change', function(event) {
+        const fileName = event.target.files[0]?.name;
+        document.getElementById('file-name').innerText = fileName ? `Selected file: ${fileName}` : '';
+        submitButton.disabled = !fileName;
+        submitButton.classList.toggle('active-button', !!fileName);
+        submitButton.classList.toggle('disabled-button', !fileName);
+    });
+
+    uploadForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+        submitButton.style.display = 'none'; // Hide the submit button
+        document.querySelector('.loader-container').style.display = 'block'; // Show loader
+
+        let progress = 0;
+        let totalTime = 9000; // 3 seconds
+        let interval = 30; // Update every 30 ms
+        let loaderBar = document.getElementById('loader-bar');
+
+        let loading = setInterval(function() {
+            progress += (interval / totalTime) * 100;
+            loaderBar.style.width = progress + '%';
+            loaderBar.innerText = Math.floor(progress) + '%';
+
+            if (progress >= 100) {
+                clearInterval(loading); // Stop when complete
+                uploadForm.submit(); // Submit form
+            }
+        }, interval);
+    });
+</script>
 </body>
 </html>
+
+{% endblock %}
