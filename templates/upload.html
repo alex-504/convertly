@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +12,11 @@
   <section class="converter">
     <div class="container">
         <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="#upload">Upload Another File</a></li>
-            </ul>
+          {% extends "base.html" %}
+
+          {% block title %}Convertly - Upload{% endblock %}
+          
+          {% block content %}
         </nav>
 
         <h1>File "{{ filename }}" uploaded and converted successfully!</h1>
@@ -28,3 +31,5 @@
   </section>
 </body>
 </html>
+
+{% endblock %}
