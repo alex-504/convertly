@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertly - Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <section class="converter">
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#upload">Upload Another File</a></li>
+            </ul>
+        </nav>
+
+        <h1>File "{{ filename }}" uploaded and converted successfully!</h1>
+        <p class="success-message">Download your file below:</p>
+        <a href="/download/{{ text_filename }}">Download extracted text</a>
+
+        <h2>Extracted Text:</h2>
+        <div id="extracted-text-container">
+          <pre id="extracted-text">{{ extracted_text | safe }}</pre>
+        </div>
+    </div>
+  </section>
+</body>
+</html>
