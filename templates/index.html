@@ -4,43 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convertly</title>
-    <style>
-        body {
-            background: #0f0f0f;
-            color: #0fddaf;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        h1, p {
-            text-shadow: 0 0 10px #0fddaf;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        input[type="submit"] {
-            background: #0fddaf;
-            border: none;
-            padding: 10px 20px;
-            color: #0f0f0f;
-            text-shadow: none;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Welcome to Convertly</h1>
-    <p>File Conversion Service</p>
+  <section class="home">
+    <div class="container">
+        <h1>Welcome to Convertly</h1>
+        <p>File Conversion Service</p>
 
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-      <input type="file" name="file" />
-      <input type="submit" value="Upload" />
-    </form>
+        <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="file-upload">Choose File</label>
+            <input id="file-upload" type="file" name="file">
+            <p id="file-name" style="margin-top: 10px;"></p>
+            <input id="submit-button" type="submit" value="Upload" disabled class="disabled-button">
+        </form>
+    </div>
+  </section>
+
+    <script>
+        const fileUpload = document.getElementById('file-upload');
+        const submitButton = document.getElementById('submit-button');
+
+        submitButton.disabled = true;
+
+        fileUpload.addEventListener('change', function(event) {
+            const fileName = event.target.files[0]?.name;
+            document.getElementById('file-name').innerText = fileName ? `Selected file: ${fileName}` : '';
+            submitButton.disabled = !fileName;
+            submitButton.classList.toggle('active-button', !!fileName);
+            submitButton.classList.toggle('disabled-button', !fileName);
+        });
+    </script>
 </body>
 </html>

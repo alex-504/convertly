@@ -39,24 +39,22 @@ def upload_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
-        # extract text from PDF using PyPDF2
+        # Extract text from PDF using PyPDF2
         reader = PdfReader(filepath)
         text = ''
-
         for page in reader.pages:
             text += page.extract_text()
 
-        # save the extracted text to a text file
+        # Save the extracted text to a text file
         text_filename = filename.rsplit('.', 1)[0] + '.txt'
         text_filepath = os.path.join(app.config['UPLOAD_FOLDER'], text_filename)
         with open(text_filepath, 'w') as text_file:
             text_file.write(text)
 
-        # provide download link for the text file
-        return f'File "{filename}" uploaded and converted successfully!<br><a href="/download/{text_filename}">Download extracted text</a><br>Extracted Text: <br><pre>{text}<pre>', 200
+        # Render the upload.html template with dynamic values
+        return render_template('upload.html', filename=filename, text_filename=text_filename, extracted_text=text)
 
-    else:
-        return 'Invalid file format. Only PDF files are allowed.', 400
+    return 'Invalid file format. Only PDF files are allowed.', 400
 
 # route to download the text file
 @app.route('/download/<filename>')
