@@ -20,10 +20,10 @@
         </nav>
 
         <h1>File "{{ filename }}" uploaded and converted successfully!</h1>
-        <p class="success-message">Download your file below:</p>
-        <a href="/download/{{ text_filename }}">Download extracted text</a>
 
-        <h2>Extracted Text:</h2>
+        <a class="button-53" href="/download/{{ text_filename }}">Download extracted text</a>
+
+        <h3>Extracted Text:</h3>
         <div id="extracted-text-container">
           <pre id="extracted-text">{{ extracted_text | safe }}</pre>
         </div>
