@@ -13,7 +13,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Function to check if file is allowed
 def allowed_file(filename):
     return '.' in filename and \
-      filename .rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
+      filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
 
 # home route
 @app.route('/')
@@ -34,6 +34,7 @@ def upload_file():
         if file.filename == '':
             return 'No selected file', 400
 
+        # Validate file type on the server side
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -53,16 +54,16 @@ def upload_file():
 
             # Render the upload.html template with dynamic values
             return render_template('upload.html', filename=filename, text_filename=text_filename, extracted_text=text), 200
+        else:
+            return 'Invalid file type. Please upload a PDF file.', 400
     
     # If it's a GET request, render the form again
     return render_template('index.html'), 200
-
 
 # route to download the text file
 @app.route('/download/<filename>')
 def download(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True), 200
-
 
 # run app
 if __name__ == '__main__':

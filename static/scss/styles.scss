@@ -207,6 +207,19 @@ nav ul li a:hover {
   box-shadow: rgba(0, 0, 0, .3) 2px 8px 4px -6px;
 }
 
+#file-name {
+  font-family: 'Courier New', Courier, monospace;
+  margin-top: 10px;
+}
+
+.valid-file {
+  color: green;
+}
+
+.invalid-file {
+  color: red;
+}
+
 
 /* Style for the "Upload" button using .button-55 */
 .button-55 {
