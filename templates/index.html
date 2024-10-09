@@ -21,7 +21,7 @@
             <label for="file-upload">Choose File</label>
             <input id="file-upload" type="file" name="file">
             <p id="file-name" style="margin-top: 10px;"></p>
-            <input id="submit-button" type="submit" value="Upload" disabled class="disabled-button">
+            <button id="submit-button" class="button-55 disabled-button" disabled>Upload</button>
         </form>
 
         <!-- Loader container -->
@@ -40,7 +40,6 @@
     
     submitButton.disabled = true;
 
-    // Event listener for file upload
     fileUpload.addEventListener('change', function(event) {
         const fileName = event.target.files[0]?.name;
         document.getElementById('file-name').innerText = fileName ? `Selected file: ${fileName}` : '';
@@ -56,7 +55,7 @@
         document.querySelector('.loader-container').style.display = 'block'; // Show loader
 
         let progress = 0;
-        let totalTime = 9000; // Adjust total time for progress bar
+        let totalTime = 2000; // Adjust total time for progress bar
         let interval = 30; // Update interval for the progress bar
 
         const loading = setInterval(function() {
