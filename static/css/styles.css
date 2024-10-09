@@ -10,6 +10,11 @@ body {
   margin: 0;
 }
 
+.home {
+  width: 90%;
+  height: 100vh;
+}
+
 .container {
   max-width: 90%;
   padding: 30px;
@@ -30,6 +35,68 @@ p {
   font-size: 1.1rem;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#file-upload {
+  margin: 20px 0;
+}
+
+.button-53 {
+  background-color: #3DD1E7;
+  border: 0 solid #E5E7EB;
+  margin: 0 auto;
+  box-sizing: border-box;
+  color: #000000;
+  display: flex;
+  font-family: ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.75rem;
+  padding: 0.75rem 1.65rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none #000000 solid;
+  text-decoration-thickness: auto;
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-53:focus {
+  outline: 0;
+}
+
+.button-53:after {
+  content: "";
+  position: absolute;
+  border: 1px solid #000000;
+  bottom: 4px;
+  left: 4px;
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
+}
+
+.button-53:hover:after {
+  bottom: 2px;
+  left: 2px;
+}
+
+@media (min-width: 768px) {
+  .button-53 {
+    padding: 0.75rem 3rem;
+    font-size: 1.25rem;
+  }
+}
 input[type=file] {
   margin-bottom: 20px;
   font-size: 1rem;
@@ -105,6 +172,67 @@ nav ul li a:hover {
   color: #28a745;
   font-size: 1.3rem;
   margin-top: 20px;
+}
+
+/* Spinner Style */
+.spinner {
+  display: none;
+  border: 8px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 8px solid #28a745;
+  width: 60px;
+  height: 60px;
+  animation: spin 1.5s linear infinite, colorChange 3s ease-in-out infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes colorChange {
+  0% {
+    border-top-color: #28a745;
+  }
+  25% {
+    border-top-color: #17a2b8;
+  }
+  50% {
+    border-top-color: #ffc107;
+  }
+  75% {
+    border-top-color: #dc3545;
+  }
+  100% {
+    border-top-color: #28a745;
+  }
+}
+.show-spinner {
+  display: block;
+}
+
+.loader-container {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-top: 20px;
+  height: 25px;
+  display: none;
+}
+
+.loader-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #28a745;
+  border-radius: 5px;
+  transition: width 0.1s;
+  text-align: center;
+  line-height: 25px;
+  color: white;
 }
 
 /*# sourceMappingURL=styles.css.map */
