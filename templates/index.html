@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,9 +11,7 @@
     <div class="container">
         <nav>
           {% extends "base.html" %}
-
           {% block title %}Convertly - Upload{% endblock %}
-          
           {% block content %}
         </nav>
         <h1>Welcome to Convertly</h1>
@@ -27,6 +23,8 @@
             <p id="file-name" style="margin-top: 10px;"></p>
             <input id="submit-button" type="submit" value="Upload" disabled class="disabled-button">
         </form>
+
+        <!-- Loader container -->
         <div class="loader-container">
           <div class="loader-bar" id="loader-bar">0%</div>
         </div>
@@ -38,10 +36,11 @@
     const uploadForm = document.getElementById('upload-form');
     const fileUpload = document.getElementById('file-upload');
     const submitButton = document.getElementById('submit-button');
-    const spinner = document.getElementById('loading-spinner');
-
+    const loaderBar = document.getElementById('loader-bar');
+    
     submitButton.disabled = true;
 
+    // Event listener for file upload
     fileUpload.addEventListener('change', function(event) {
         const fileName = event.target.files[0]?.name;
         document.getElementById('file-name').innerText = fileName ? `Selected file: ${fileName}` : '';
@@ -50,28 +49,29 @@
         submitButton.classList.toggle('disabled-button', !fileName);
     });
 
+    // Handle form submission and progress bar animation
     uploadForm.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
-        submitButton.style.display = 'none'; // Hide the submit button
+        event.preventDefault(); // Prevent default form submission
+        submitButton.style.display = 'none'; // Hide submit button
         document.querySelector('.loader-container').style.display = 'block'; // Show loader
 
         let progress = 0;
-        let totalTime = 9000; // 3 seconds
-        let interval = 30; // Update every 30 ms
-        let loaderBar = document.getElementById('loader-bar');
+        let totalTime = 9000; // Adjust total time for progress bar
+        let interval = 30; // Update interval for the progress bar
 
-        let loading = setInterval(function() {
+        const loading = setInterval(function() {
             progress += (interval / totalTime) * 100;
             loaderBar.style.width = progress + '%';
-            loaderBar.innerText = Math.floor(progress) + '%';
+            loaderBar.innerText = Math.floor(progress) + '%'; // Display the percentage inside the bar
 
             if (progress >= 100) {
                 clearInterval(loading); // Stop when complete
+                loaderBar.innerText = '100%';
                 uploadForm.submit(); // Submit form
             }
         }, interval);
     });
-</script>
+  </script>
 </body>
 </html>
 
