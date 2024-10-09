@@ -18,11 +18,12 @@
         <p>File Conversion Service</p>
 
         <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-            <label for="file-upload">Choose File</label>
-            <input id="file-upload" type="file" name="file">
-            <p id="file-name" style="margin-top: 10px;"></p>
-            <button id="submit-button" class="button-55 disabled-button" disabled>Upload</button>
-        </form>
+          <label for="file-upload">Choose File</label>
+          <input id="file-upload" type="file" name="file">
+          <p id="file-name" style="margin-top: 10px;"></p>
+          <p id="file-error" style="color: red; display: none;">Only PDF files are allowed</p> <!-- Error message -->
+          <button id="submit-button" class="button-55 disabled-button" disabled>Upload</button>
+      </form>
 
         <!-- Loader container -->
         <div class="loader-container">
@@ -32,45 +33,63 @@
     </div>
   </section>
 
-  <script>
-    const uploadForm = document.getElementById('upload-form');
-    const fileUpload = document.getElementById('file-upload');
-    const submitButton = document.getElementById('submit-button');
-    const loaderBar = document.getElementById('loader-bar');
-    
-    submitButton.disabled = true;
+<script>
+  const uploadForm = document.getElementById('upload-form');
+  const fileUpload = document.getElementById('file-upload');
+  const submitButton = document.getElementById('submit-button');
+  const fileNameDisplay = document.getElementById('file-name');
+  const fileError = document.getElementById('file-error');  // Error message element
+  const loaderBar = document.getElementById('loader-bar');
 
-    fileUpload.addEventListener('change', function(event) {
-        const fileName = event.target.files[0]?.name;
-        document.getElementById('file-name').innerText = fileName ? `Selected file: ${fileName}` : '';
-        submitButton.disabled = !fileName;
-        submitButton.classList.toggle('active-button', !!fileName);
-        submitButton.classList.toggle('disabled-button', !fileName);
-    });
+  const allowedExtensions = ['pdf'];  // Only PDF files allowed
 
-    // Handle form submission and progress bar animation
-    uploadForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
-        submitButton.style.display = 'none'; // Hide submit button
-        document.querySelector('.loader-container').style.display = 'block'; // Show loader
+  submitButton.disabled = true;
 
-        let progress = 0;
-        let totalTime = 2000; // Adjust total time for progress bar
-        let interval = 30; // Update interval for the progress bar
+  fileUpload.addEventListener('change', function(event) {
+      const fileName = event.target.files[0]?.name;
+      const fileExtension = fileName?.split('.').pop().toLowerCase();
+      const isFileValid = allowedExtensions.includes(fileExtension);
 
-        const loading = setInterval(function() {
-            progress += (interval / totalTime) * 100;
-            loaderBar.style.width = progress + '%';
-            loaderBar.innerText = Math.floor(progress) + '%'; // Display the percentage inside the bar
+      fileNameDisplay.innerText = fileName ? `Selected file: ${fileName}` : '';
 
-            if (progress >= 100) {
-                clearInterval(loading); // Stop when complete
-                loaderBar.innerText = '100%';
-                uploadForm.submit(); // Submit form
-            }
-        }, interval);
-    });
-  </script>
+      if (isFileValid) {
+          fileNameDisplay.style.color = 'green';
+          submitButton.disabled = false;
+          submitButton.classList.add('active-button');
+          submitButton.classList.remove('disabled-button');
+          fileError.style.display = 'none';  // Hide the error message if the file is valid
+      } else {
+          fileNameDisplay.style.color = 'red';
+          submitButton.disabled = true;
+          submitButton.classList.add('disabled-button');
+          submitButton.classList.remove('active-button');
+          fileError.style.display = 'block';  // Show error message if the file is invalid
+      }
+  });
+
+  // Handle form submission and progress bar animation
+  uploadForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+      submitButton.style.display = 'none'; // Hide submit button
+      document.querySelector('.loader-container').style.display = 'block'; // Show loader
+
+      let progress = 0;
+      let totalTime = 2000; // Adjust total time for progress bar
+      let interval = 30; // Update interval for the progress bar
+
+      const loading = setInterval(function() {
+          progress += (interval / totalTime) * 100;
+          loaderBar.style.width = progress + '%';
+          loaderBar.innerText = Math.floor(progress) + '%'; // Display the percentage inside the bar
+
+          if (progress >= 100) {
+              clearInterval(loading); // Stop when complete
+              loaderBar.innerText = '100%';
+              uploadForm.submit(); // Submit form
+          }
+      }, interval);
+  });
+</script>
 </body>
 </html>
 
