@@ -10,6 +10,11 @@ body {
   margin: 0;
 }
 
+.home {
+  justify-content: center;
+  width: 90%;
+}
+
 .container {
   max-width: 90%;
   padding: 30px;
@@ -21,14 +26,15 @@ body {
 
 h1 {
   color: #28a745;
-  font-size: 1.0rem;
-  width: 60%;
-  margin: 20px auto;;
+  font-size: 1.3rem;
+  width: 100%; /* Ensure heading takes full width */
+  margin: 20px auto;
 }
 
 p {
   font-size: 1.1rem;
 }
+
 
 input[type="file"] {
   margin-bottom: 20px;
@@ -136,22 +142,136 @@ nav ul li a:hover {
     display: block;
 }
 
+/* Loader styles */
 .loader-container {
   width: 100%;
   background-color: #f3f3f3;
   border-radius: 5px;
   margin-top: 20px;
   height: 25px;
-  display: none;
+  display: none; /* Initially hidden */
 }
 
 .loader-bar {
   height: 100%;
   width: 0%;
-  background-color: #28a745;
+  background-color: #28a745; /* Green background */
   border-radius: 5px;
-  transition: width 0.1s;
+  transition: width 0.3s ease; /* Smooth progress animation */
   text-align: center;
-  line-height: 25px;
-  color: white;
+  line-height: 25px; /* Vertical centering of percentage */
+  color: white; /* Percentage text color */
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+
+// Download button
+.button-55 {
+  align-self: center;
+  background-color: #b3dcb4;
+  background-image: none;
+  background-position: 0 90%;
+  background-repeat: repeat no-repeat;
+  background-size: 4px 3px;
+  border-radius: 15px 225px 255px 15px 15px 255px 225px 15px;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: rgba(0, 0, 0, .2) 15px 28px 25px -18px;
+  box-sizing: border-box;
+  color: #41403e;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Neucha, sans-serif;
+  font-size: 1rem;
+  line-height: 23px;
+  outline: none;
+  padding: .75rem;
+  text-decoration: none;
+  transition: all 235ms ease-in-out;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-55:hover {
+  box-shadow: rgba(0, 0, 0, .3) 2px 8px 8px -5px;
+  transform: translate3d(0, 2px, 0);
+}
+
+.button-55:focus {
+  box-shadow: rgba(0, 0, 0, .3) 2px 8px 4px -6px;
+}
+
+#file-name {
+  font-family: 'Courier New', Courier, monospace;
+  margin-top: 10px;
+}
+
+.valid-file {
+  color: green;
+}
+
+.invalid-file {
+  color: red;
+}
+
+
+/* Style for the "Upload" button using .button-55 */
+.button-55 {
+  align-self: center;
+  background-color: #b3dcb4;
+  background-image: none;
+  background-position: 0 90%;
+  background-repeat: repeat no-repeat;
+  background-size: 4px 3px;
+  border-radius: 15px 225px 255px 15px 15px 255px 225px 15px;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: rgba(0, 0, 0, .2) 15px 28px 25px -18px;
+  box-sizing: border-box;
+  color: #41403e;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Neucha, sans-serif;
+  font-size: 1rem;
+  line-height: 23px;
+  outline: none;
+  padding: .75rem;
+  text-decoration: none;
+  transition: all 235ms ease-in-out;
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-55:hover {
+  box-shadow: rgba(0, 0, 0, .3) 2px 8px 8px -5px;
+  transform: translate3d(0, 2px, 0);
+}
+
+/* Disabled state */
+.button-55:disabled,
+.button-55.disabled-button {
+  background-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.button-55:enabled:hover {
+  background-color: #8bdf97; /* Slightly lighter green when hovered */
+}
+
+/* Active button state (enabled) */
+.button-55.active-button {
+  background-color: #b3dcb4;
+  cursor: pointer;
 }
