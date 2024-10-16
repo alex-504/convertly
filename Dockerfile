@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+# create directory for uploads
+RUN mkdir -p /app/uploads
+
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -18,3 +21,5 @@ ENV FLASK_APP=app.py
 
 # Run gunicorn to serve the app
 CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "app:app"]
+
+
