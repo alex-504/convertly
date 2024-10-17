@@ -10,87 +10,122 @@
   <section class="home">
     <div class="container">
         <nav>
-          {% extends "base.html" %}
-          {% block title %}Convertly - Upload{% endblock %}
-          {% block content %}
+          <a href="/">Home</a>
+          <a href="/upload">Upload Another File</a>
         </nav>
         <h1>Welcome to Convertly</h1>
         <p>File Conversion Service</p>
 
         <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-          <label for="file-upload">Choose File</label>
-          <input id="file-upload" type="file" name="file">
-          <p id="file-name" style="margin-top: 10px;"></p>
-          <p id="file-error" style="color: red; display: none;">Only PDF files are allowed</p> <!-- Error message -->
-          <button id="submit-button" class="button-55 disabled-button" disabled>Upload</button>
-      </form>
+            <label for="file-upload">Choose File</label>
+            <input id="file-upload" type="file" name="file">
+            <p id="file-name" style="margin-top: 10px;"></p>
+            <button id="submit-button" class="button-55 disabled-button" disabled>Upload</button>
+        </form>
 
         <!-- Loader container -->
         <div class="loader-container">
           <div class="loader-bar" id="loader-bar">0%</div>
         </div>
         <div class="spinner" id="loading-spinner"></div>
+
+        <!-- Modal for password input -->
+        <div id="password-modal" class="modal">
+            <div class="modal-content">
+                <span id="close-modal" class="close">&times;</span>
+                <h2>PDF Password Required</h2>
+                <p>This file is encrypted. Please provide the password to proceed:</p>
+                <input id="pdf-password" type="password" placeholder="Enter password">
+                <button id="submit-password" class="button-55">Submit Password</button>
+            </div>
+        </div>
     </div>
   </section>
 
-<script>
-  const uploadForm = document.getElementById('upload-form');
-  const fileUpload = document.getElementById('file-upload');
-  const submitButton = document.getElementById('submit-button');
-  const fileNameDisplay = document.getElementById('file-name');
-  const fileError = document.getElementById('file-error');  // Error message element
-  const loaderBar = document.getElementById('loader-bar');
+  <script>
+    const uploadForm = document.getElementById('upload-form');
+    const fileUpload = document.getElementById('file-upload');
+    const submitButton = document.getElementById('submit-button');
+    const loaderBar = document.getElementById('loader-bar');
+    const passwordModal = document.getElementById('password-modal');
+    const closeModal = document.getElementById('close-modal');
+    const submitPasswordButton = document.getElementById('submit-password');
+    const pdfPasswordInput = document.getElementById('pdf-password');
+    let currentFilename = '';
 
-  const allowedExtensions = ['pdf'];  // Only PDF files allowed
+    // File selection and validation
+    fileUpload.addEventListener('change', function(event) {
+        const fileName = event.target.files[0]?.name;
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        const allowedExtensions = ['pdf'];
 
-  submitButton.disabled = true;
+        if (fileName && allowedExtensions.includes(fileExtension)) {
+            document.getElementById('file-name').innerText = `Selected file: ${fileName}`;
+            submitButton.disabled = false;
+            submitButton.classList.remove('disabled-button');
+            submitButton.classList.add('active-button');
+        } else {
+            document.getElementById('file-name').innerText = 'Invalid file type. Please upload a PDF.';
+            submitButton.disabled = true;
+            submitButton.classList.remove('active-button');
+            submitButton.classList.add('disabled-button');
+        }
+    });
 
-  fileUpload.addEventListener('change', function(event) {
-      const fileName = event.target.files[0]?.name;
-      const fileExtension = fileName?.split('.').pop().toLowerCase();
-      const isFileValid = allowedExtensions.includes(fileExtension);
+    // File upload and password modal logic
+    uploadForm.addEventListener('submit', function(event) {
+        event.preventDefault();
 
-      fileNameDisplay.innerText = fileName ? `Selected file: ${fileName}` : '';
+        const formData = new FormData(uploadForm);
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.encrypted) {
+                currentFilename = data.filename;
+                passwordModal.style.display = 'block'; // Show the modal
+            } else {
+                // Redirect to show the file and download link
+                window.location.href = `/show_result/${data.filename}/${data.text_filename}`;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
 
-      if (isFileValid) {
-          fileNameDisplay.style.color = 'green';
-          submitButton.disabled = false;
-          submitButton.classList.add('active-button');
-          submitButton.classList.remove('disabled-button');
-          fileError.style.display = 'none';  // Hide the error message if the file is valid
-      } else {
-          fileNameDisplay.style.color = 'red';
-          submitButton.disabled = true;
-          submitButton.classList.add('disabled-button');
-          submitButton.classList.remove('active-button');
-          fileError.style.display = 'block';  // Show error message if the file is invalid
-      }
-  });
+    // Close the modal
+    closeModal.addEventListener('click', function() {
+        passwordModal.style.display = 'none';
+    });
 
-  // Handle form submission and progress bar animation
-  uploadForm.addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent default form submission
-      submitButton.style.display = 'none'; // Hide submit button
-      document.querySelector('.loader-container').style.display = 'block'; // Show loader
+    // Submit password
+    submitPasswordButton.addEventListener('click', function() {
+        const password = pdfPasswordInput.value;
+        fetch('/submit_password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ password: password, filename: currentFilename }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = `/show_result/${data.filename}/${data.text_filename}`;
+            } else {
+                alert('Password incorrect. Please try again.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
 
-      let progress = 0;
-      let totalTime = 2000; // Adjust total time for progress bar
-      let interval = 30; // Update interval for the progress bar
-
-      const loading = setInterval(function() {
-          progress += (interval / totalTime) * 100;
-          loaderBar.style.width = progress + '%';
-          loaderBar.innerText = Math.floor(progress) + '%'; // Display the percentage inside the bar
-
-          if (progress >= 100) {
-              clearInterval(loading); // Stop when complete
-              loaderBar.innerText = '100%';
-              uploadForm.submit(); // Submit form
-          }
-      }, interval);
-  });
-</script>
+    // Hide modal on outside click
+    window.addEventListener('click', function(event) {
+        if (event.target === passwordModal) {
+            passwordModal.style.display = 'none';
+        }
+    });
+  </script>
 </body>
 </html>
-
-{% endblock %}
