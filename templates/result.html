@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertly - Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <section class="result-page">
+    <div class="container">
+        <nav>
+          <a href="/">Home</a>
+          <a href="/upload">Upload Another File</a>
+        </nav>
+        <h1>Conversion Completed</h1>
+        <p>File: {{ filename }}</p>
+        <a href="/download/{{ text_filename }}" class="button-55">Download Extracted Text</a>
+        
+        <h2>Extracted Text:</h2>
+        <div id="extracted-text-container">
+            <pre>{{ extracted_text }}</pre>  <!-- Display the extracted text here -->
+        </div>
+    </div>
+  </section>
+</body>
+</html>
