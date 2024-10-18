@@ -3,16 +3,17 @@ body {
   font-family: 'Roboto', sans-serif;
   color: #333;
   text-align: center;
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
+  margin: 30px auto;
 }
 
 .home {
   justify-content: center;
   width: 90%;
+  margin: 30px auto;
 }
 
 .container {
@@ -163,6 +164,11 @@ nav ul li a:hover {
   color: white; /* Percentage text color */
   font-weight: bold;
   font-size: 1rem;
+}
+
+.result-page {
+  width: 90%;
+  margin: 30px auto;
 }
 
 
