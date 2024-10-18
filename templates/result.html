@@ -9,10 +9,13 @@
 <body>
   <section class="result-page">
     <div class="container">
-        <nav>
-          <a href="/">Home</a>
-          <a href="/upload">Upload Another File</a>
-        </nav>
+      <nav>
+        {% extends "base.html" %}
+
+        {% block title %}Convertly - Upload{% endblock %}
+        
+        {% block content %}
+      </nav>
         <h1>Conversion Completed</h1>
         <p>File: {{ filename }}</p>
         <a href="/download/{{ text_filename }}" class="button-55">Download Extracted Text</a>
@@ -24,4 +27,5 @@
     </div>
   </section>
 </body>
+{% endblock %}
 </html>
